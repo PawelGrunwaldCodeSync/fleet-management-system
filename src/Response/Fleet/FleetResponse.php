@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Response\Fleet;
 
-use App\Entity\Fleet;
 use OpenApi\Attributes as OA;
 
-#[OA\Schema]
+#[OA\Schema(
+    schema: 'FleetResponse',
+    description: 'Single fleet response',
+    type: 'object'
+)]
 readonly class FleetResponse
 {
     public function __construct(
@@ -39,15 +42,5 @@ readonly class FleetResponse
         )]
         public ?string $workingHours = null,
     ) {
-    }
-
-    public static function fromEntity(Fleet $fleet): self
-    {
-        return new self(
-            id: $fleet->getId(),
-            name: $fleet->getName(),
-            address: $fleet->getAddress(),
-            workingHours: $fleet->getWorkingHours(),
-        );
     }
 }

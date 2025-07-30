@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Response;
+namespace App\OpenApi\Response;
 
 use OpenApi\Attributes as OA;
 use OpenApi\Attributes\MediaType;

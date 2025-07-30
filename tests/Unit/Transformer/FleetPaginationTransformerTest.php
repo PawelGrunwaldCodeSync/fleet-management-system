@@ -42,15 +42,13 @@ class FleetPaginationTransformerTest extends TestCase
             workingHours: '8:00 - 16:00',
         );
 
-        $this->responseTransformer->expects($this->any())
+        $this->responseTransformer->expects($this->exactly(2))
             ->method('transform')
             ->with($fleet1)
-            ->willReturn($fleetResponse1);
-
-        $this->responseTransformer->expects($this->any())
-            ->method('transform')
-            ->with($fleet2)
-            ->willReturn($fleetResponse2);
+            ->willReturnMap([
+                [$fleet1, $fleetResponse1],
+                [$fleet2, $fleetResponse2],
+            ]);
 
         $paginationResponse = new PaginationResponse(
             currentPage: 1,
@@ -64,6 +62,6 @@ class FleetPaginationTransformerTest extends TestCase
         $this->assertInstanceOf(FleetPaginationResponse::class, $result);
         $this->assertSame($paginationResponse, $result->pagination);
         $this->assertSame($fleetResponse1, $result->data[0]);
-        $this->assertSame($fleetResponse2, $result->data[0]);
+        $this->assertSame($fleetResponse2, $result->data[1]);
     }
 }
