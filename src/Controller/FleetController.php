@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\OpenApi\Query\LimitParameterQuery;
+use App\OpenApi\Query\PageParameterQuery;
+use App\OpenApi\Response\EntityNotFoundResponse;
+use App\OpenApi\Response\ValidationFailedResponse;
 use App\Paginator\FleetPaginator;
 use App\Repository\FleetRepository;
 use App\Request\Fleet\StoreFleetRequest;
 use App\Request\Fleet\UpdateFleetRequest;
-use App\Response\EntityNotFoundResponse;
 use App\Response\Fleet\FleetPaginationResponse;
 use App\Response\Fleet\FleetResponse;
-use App\Response\ValidationFailedResponse;
 use App\Transformer\Fleet\FleetResponseTransformer;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
@@ -32,6 +34,8 @@ final class FleetController extends AbstractController
     }
 
     #[Route('/api/fleets', name: 'fleet_get', methods: ['GET'])]
+    #[PageParameterQuery]
+    #[LimitParameterQuery]
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Get fleets list',
