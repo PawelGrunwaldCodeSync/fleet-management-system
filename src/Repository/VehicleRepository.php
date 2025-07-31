@@ -47,7 +47,7 @@ class VehicleRepository extends ServiceEntityRepository
             ),
         )
             ->setParameter('registration_number', $dto->registrationNumber)
-            ->setParameter('driver', $dto->registrationNumber);
+            ->setParameter('driver', $dto->driver);
 
         return $query->getQuery()->getOneOrNullResult();
     }
