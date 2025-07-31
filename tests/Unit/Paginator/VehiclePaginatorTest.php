@@ -50,14 +50,14 @@ class VehiclePaginatorTest extends TestCase
         ];
 
         $paginationResponse = new PaginationResponse(
-            currentPage: 1,
-            maxPerPage: 10,
-            totalItems: 2,
-            totalPages: 1
+            current_page: 1,
+            max_per_page: 10,
+            total_items: 2,
+            total_pages: 1
         );
         $vehicleResponse = new VehicleResponse(
             id: 1,
-            registrationNumber: 'LU000',
+            registration_number: 'LU000',
             driver: 'Jan Kowalski',
         );
         $vehiclePaginationResponse = new VehiclePaginationResponse(

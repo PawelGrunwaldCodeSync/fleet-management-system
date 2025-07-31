@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Manager\FleetManager;
 use App\OpenApi\Query\LimitParameterQuery;
 use App\OpenApi\Query\PageParameterQuery;
 use App\OpenApi\Response\EntityNotFoundResponse;
 use App\OpenApi\Response\ValidationFailedResponse;
 use App\Paginator\FleetPaginator;
-use App\Repository\FleetRepository;
 use App\Request\Fleet\StoreFleetRequest;
 use App\Request\Fleet\UpdateFleetRequest;
 use App\Response\Fleet\FleetPaginationResponse;
 use App\Response\Fleet\FleetResponse;
-use App\Transformer\Fleet\FleetResponseTransformer;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,9 +26,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class FleetController extends AbstractController
 {
     public function __construct(
-        private readonly FleetRepository $repository,
         private readonly FleetPaginator $paginator,
-        private readonly FleetResponseTransformer $responseTransformer,
+        private readonly FleetManager $fleetManager,
     ) {
     }
 
@@ -85,8 +83,7 @@ final class FleetController extends AbstractController
     public function store(StoreFleetRequest $request): JsonResponse
     {
         try {
-            $fleet = $this->repository->store($request->toDto());
-            $response = $this->responseTransformer->transform($fleet);
+            $response = $this->fleetManager->storeWithVehicles($request->toDto());
         } catch (\Exception $e) {
             return $this->json(
                 data: [
@@ -128,8 +125,7 @@ final class FleetController extends AbstractController
     public function update(UpdateFleetRequest $request): JsonResponse
     {
         try {
-            $fleet = $this->repository->update($request->toDto());
-            $response = $this->responseTransformer->transform($fleet);
+            $response = $this->fleetManager->updateWithVehicles($request->toDto());
         } catch (\Exception $e) {
             return $this->json(
                 data: [

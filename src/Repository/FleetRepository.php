@@ -28,9 +28,8 @@ class FleetRepository extends ServiceEntityRepository
      */
     public function paginationQuery(): Pagerfanta
     {
-        $query = $this->getEntityManager()->createQueryBuilder()
+        $query = $this->createQueryBuilder('f')
             ->select('f')
-            ->from(Fleet::class, 'f')
             ->orderBy('f.id', SortingDirection::DESC->value);
 
         return new Pagerfanta(
@@ -41,9 +40,9 @@ class FleetRepository extends ServiceEntityRepository
     public function store(FleetDto $dto): Fleet
     {
         $entity = new Fleet();
-        $entity->setName($dto->getName());
-        $entity->setAddress($dto->getAddress());
-        $entity->setWorkingHours($dto->getWorkingHours());
+        $entity->setName($dto->name);
+        $entity->setAddress($dto->address);
+        $entity->setWorkingHours($dto->workingHours);
 
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
@@ -53,15 +52,15 @@ class FleetRepository extends ServiceEntityRepository
 
     public function update(FleetDto $dto): Fleet
     {
-        $entity = $this->find($dto->getId());
+        $entity = $this->find($dto->id);
 
         if (!$entity) {
-            throw EntityNotFoundException::fromId($dto->getId());
+            throw EntityNotFoundException::fromId($dto->id);
         }
 
-        $entity->setName($dto->getName());
-        $entity->setAddress($dto->getAddress());
-        $entity->setWorkingHours($dto->getWorkingHours());
+        $entity->setName($dto->name);
+        $entity->setAddress($dto->address);
+        $entity->setWorkingHours($dto->workingHours);
 
         $this->getEntityManager()->flush();
 

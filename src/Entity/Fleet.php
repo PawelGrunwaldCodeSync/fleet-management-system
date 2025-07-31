@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\FleetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FleetRepository::class)]
@@ -30,6 +32,15 @@ class Fleet
 
     #[ORM\Column(name: 'updated_at', type: 'datetime_immutable')]
     private \DateTimeInterface $updatedAt;
+
+    /** @var Collection<int, Vehicle> */
+    #[ORM\ManyToMany(targetEntity: Vehicle::class, inversedBy: 'fleets')]
+    private Collection $vehicles;
+
+    public function __construct()
+    {
+        $this->vehicles = new ArrayCollection();
+    }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -106,6 +117,28 @@ class Fleet
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /** @return Collection<int, Vehicle> */
+    public function getVehicles(): Collection
+    {
+        return $this->vehicles;
+    }
+
+    public function addVehicle(Vehicle $vehicle): self
+    {
+        if (!$this->vehicles->contains($vehicle)) {
+            $this->vehicles->add($vehicle);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicle(Vehicle $vehicle): self
+    {
+        $this->vehicles->removeElement($vehicle);
 
         return $this;
     }

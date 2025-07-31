@@ -6,9 +6,11 @@ namespace App\Request\Fleet;
 
 use App\Dto\Fleet\FleetDto;
 use App\Request\Contracts\RequestInterface;
+use App\Request\Vehicle\StoreVehicleRequest;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[OA\Schema]
 class StoreFleetRequest implements RequestInterface
 {
     #[OA\Property(
@@ -43,14 +45,24 @@ class StoreFleetRequest implements RequestInterface
     )]
     #[Assert\Type(type: 'string')]
     #[Assert\Length(max: 80)]
-    public ?string $workingHours = null;
+    public ?string $working_hours = null;
+
+    /** @var array<int, StoreVehicleRequest>|null $vehicles */
+    #[Assert\Valid]
+    public ?array $vehicles = null;
 
     public function toDto(): FleetDto
     {
+        $vehicles = array_map(
+            fn (StoreVehicleRequest $vehicleRequest) => $vehicleRequest->toDto(),
+            $this->vehicles ?? [],
+        );
+
         return new FleetDto(
-            name: $this->name,
-            address: $this->address,
-            workingHours: $this->workingHours,
+            name: $this->name ?? '',
+            address: $this->address ?? '',
+            workingHours: $this->working_hours,
+            vehicles: $vehicles,
         );
     }
 }

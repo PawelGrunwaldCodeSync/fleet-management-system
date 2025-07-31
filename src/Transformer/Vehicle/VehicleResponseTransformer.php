@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace App\Transformer\Vehicle;
 
 use App\Entity\Vehicle;
+use App\Response\Fleet\FleetResponse;
 use App\Response\Vehicle\VehicleResponse;
 
 class VehicleResponseTransformer
 {
-    public function transform(Vehicle $vehicle): VehicleResponse
+    /**
+     * @param array<int, FleetResponse> $fleets
+     */
+    public function transform(Vehicle $vehicle, array $fleets = []): VehicleResponse
     {
         return new VehicleResponse(
             id: $vehicle->getId(),
-            registrationNumber: $vehicle->getRegistrationNumber(),
+            registration_number: $vehicle->getRegistrationNumber(),
             driver: $vehicle->getDriver(),
+            fleets: $fleets,
         );
     }
 }

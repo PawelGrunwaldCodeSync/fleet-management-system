@@ -18,10 +18,10 @@ class PagerfantaPaginationResponseTransformer
         Pagerfanta $pagerfanta,
     ): PaginationResponse {
         return new PaginationResponse(
-            currentPage: $pagerfanta->getCurrentPage(),
-            maxPerPage: $pagerfanta->getMaxPerPage(),
-            totalItems: $pagerfanta->getNbResults(),
-            totalPages: $pagerfanta->getNbPages(),
+            current_page: $pagerfanta->getCurrentPage(),
+            max_per_page: $pagerfanta->getMaxPerPage(),
+            total_items: $pagerfanta->getNbResults(),
+            total_pages: $pagerfanta->getNbPages(),
         );
     }
 }

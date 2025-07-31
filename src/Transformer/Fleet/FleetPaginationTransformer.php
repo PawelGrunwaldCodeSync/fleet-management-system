@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Transformer\Fleet;
 
 use App\Entity\Fleet;
+use App\Entity\Vehicle;
 use App\Response\Fleet\FleetPaginationResponse;
 use App\Response\Pagination\PaginationResponse;
 use App\Transformer\Contracts\PaginationTransformerInterface;
+use App\Transformer\Vehicle\VehicleResponseTransformer;
 
 class FleetPaginationTransformer implements PaginationTransformerInterface
 {
     public function __construct(
-        private readonly FleetResponseTransformer $responseTransformer,
+        private readonly FleetResponseTransformer $fleetResponseTransformer,
+        private readonly VehicleResponseTransformer $vehicleResponseTransformer,
     ) {
     }
 
@@ -27,7 +30,15 @@ class FleetPaginationTransformer implements PaginationTransformerInterface
 
         /** @var Fleet $fleet */
         foreach ($items as $fleet) {
-            $data[] = $this->responseTransformer->transform($fleet);
+            $vehicles = array_map(
+                fn (Vehicle $vehicle) => $this->vehicleResponseTransformer->transform($vehicle),
+                $fleet->getVehicles()->toArray(),
+            );
+
+            $data[] = $this->fleetResponseTransformer->transform(
+                fleet: $fleet,
+                vehicles: $vehicles,
+            );
         }
 
         return new FleetPaginationResponse(
