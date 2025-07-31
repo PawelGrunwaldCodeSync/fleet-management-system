@@ -5,34 +5,21 @@ declare(strict_types=1);
 namespace App\Dto\Fleet;
 
 use App\Dto\Contracts\DataInterface;
+use App\Dto\Vehicle\VehicleDto;
 
 readonly class FleetDto implements DataInterface
 {
+    /**
+     * @param array<int, VehicleDto> $vehicles
+     * @param array<int, int>        $vehicle_ids_detach
+     */
     public function __construct(
-        private ?string $name,
-        private ?string $address,
-        private ?string $workingHours = null,
-        private ?int $id = null,
+        public string $name,
+        public string $address,
+        public ?string $workingHours = null,
+        public ?int $id = null,
+        public array $vehicles = [],
+        public array $vehicle_ids_detach = [],
     ) {
-    }
-
-    public function getName(): string
-    {
-        return $this->name ?? '';
-    }
-
-    public function getAddress(): string
-    {
-        return $this->address ?? '';
-    }
-
-    public function getWorkingHours(): ?string
-    {
-        return $this->workingHours;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 }

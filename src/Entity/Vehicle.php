@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\VehicleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
@@ -27,6 +29,17 @@ class Vehicle
 
     #[ORM\Column(name: 'updated_at', type: 'datetime_immutable')]
     private \DateTimeInterface $updatedAt;
+
+    /**
+     * @var Collection<int, Fleet>
+     */
+    #[ORM\ManyToMany(targetEntity: Fleet::class, mappedBy: 'vehicles')]
+    private Collection $fleets;
+
+    public function __construct()
+    {
+        $this->fleets = new ArrayCollection();
+    }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -93,5 +106,11 @@ class Vehicle
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /** @return Collection<int, Fleet> */
+    public function getFleets(): Collection
+    {
+        return $this->fleets;
     }
 }
