@@ -6,15 +6,12 @@ namespace App\Response\Fleet;
 
 use App\Response\Vehicle\VehicleResponse;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Serializer\Attribute\Groups;
 
-#[OA\Schema(
-    schema: 'FleetResponse',
-    description: 'Single fleet response',
-    type: 'object'
-)]
 readonly class FleetResponse
 {
     public function __construct(
+        #[Groups(['user:store', 'user:update'])]
         #[OA\Property(
             description: 'ID of fleet',
             type: 'integer',
@@ -22,6 +19,7 @@ readonly class FleetResponse
         )]
         public int $id,
 
+        #[Groups(['user:store', 'user:update'])]
         #[OA\Property(
             description: 'Name of fleet',
             type: 'string',
@@ -29,6 +27,7 @@ readonly class FleetResponse
         )]
         public string $name,
 
+        #[Groups(['user:store', 'user:update'])]
         #[OA\Property(
             description: 'Address of fleet',
             type: 'string',
@@ -36,6 +35,7 @@ readonly class FleetResponse
         )]
         public string $address,
 
+        #[Groups(['user:store', 'user:update'])]
         #[OA\Property(
             description: 'Working hours',
             type: 'string',
