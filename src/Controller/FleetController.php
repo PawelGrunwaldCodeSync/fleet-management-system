@@ -75,6 +75,7 @@ final class FleetController extends AbstractController
             schema: new OA\Schema(
                 ref: new Model(
                     type: FleetResponse::class,
+                    groups: ['user:store'],
                 ),
             ),
         ),
@@ -116,6 +117,7 @@ final class FleetController extends AbstractController
             schema: new OA\Schema(
                 ref: new Model(
                     type: FleetResponse::class,
+                    groups: ['user:update'],
                 ),
             ),
         ),
